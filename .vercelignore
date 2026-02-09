@@ -1,0 +1,33 @@
+# Dependencies
+node_modules
+
+# Environment files (set in Vercel dashboard instead)
+.env
+.env.*
+
+# Development files
+src
+*.ts
+!api/**/*.ts
+tsconfig.json
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+
+# Docs
+*.md
+!README.md
+
+# Tests
+test
+tests
+*.test.js
+*.spec.js
+
+# Logs
+*.log
