@@ -51,6 +51,8 @@ if (config.enableSwagger) {
   // Serve swagger.json
   app.get('/api-docs.json', (req: any, res: any) => {
     res.setHeader('Content-Type', 'application/json');
+    // Remove any CSP headers for JSON endpoint
+    res.removeHeader('Content-Security-Policy');
     res.send(swaggerSpec);
   });
 
@@ -99,6 +101,9 @@ if (config.enableSwagger) {
 
   app.get('/api-docs', (req: any, res: any) => {
     res.setHeader('Content-Type', 'text/html');
+    // Explicitly remove CSP to allow inline scripts
+    res.removeHeader('Content-Security-Policy');
+    res.removeHeader('Content-Security-Policy-Report-Only');
     res.send(swaggerHtml);
   });
 }

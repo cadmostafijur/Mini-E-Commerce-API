@@ -9,9 +9,9 @@ export const securityHeaders = helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      // Allow Swagger UI CDN assets
+      // Allow Swagger UI CDN assets and inline scripts (needed for Swagger UI)
       styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
-      scriptSrc: ["'self'", "https://cdn.jsdelivr.net"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
       imgSrc: ["'self'", "data:", "https:", "https://cdn.jsdelivr.net"],
       connectSrc: ["'self'"],
       fontSrc: ["'self'", "https://cdn.jsdelivr.net"],
