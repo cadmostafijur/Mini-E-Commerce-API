@@ -330,7 +330,7 @@ curl -X POST http://localhost:3000/api/orders \
   -H "Content-Type: application/json" \
   -d '{"paymentMethod": "credit_card"}'
 ```
-
+<!-- 
 ## 🚀 Deployment
 
 ### Environment Variables for Production
@@ -370,47 +370,4 @@ npm run db:migrate
 - `npm run db:generate` - Generate Prisma client
 - `npm run db:migrate` - Run database migrations
 - `npm run db:seed` - Seed database with sample data
-- `npm run db:reset` - Reset database (DEV ONLY)
-
-### Code Style
-- TypeScript with strict mode
-- ESLint for code quality
-- Prettier for formatting
-- Consistent error handling
-- Comprehensive logging
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🆘 Support
-
-For support and questions:
-- Check the [API documentation](http://localhost:3000/api-docs)
-- Review this README
-- Check existing issues in the repository
-- Create a new issue with detailed information
-
-## 🔄 Changelog
-
-### v1.0.0 (Initial Release)
-- Complete authentication system with JWT
-- Product management with inventory tracking
-- Shopping cart functionality
-- Order processing with payment simulation
-- Admin analytics and reporting
-- Comprehensive API documentation
-- Rate limiting and security features
-- Database transactions and error handling
-
----
-
-**Built with ❤️ for learning and production use.** This API demonstrates enterprise-level Node.js backend development with modern best practices, clean architecture, and comprehensive feature implementation.
+- `npm run db:reset` - Reset database (DEV ONLY) -->
