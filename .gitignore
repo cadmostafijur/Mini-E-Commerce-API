@@ -150,3 +150,6 @@ temp/
 # Ignore markdown docs except README.md
 *.md
 !README.md
+!DEPLOY_*.md
+!DEPLOY_VERCEL.md
+.vercel
