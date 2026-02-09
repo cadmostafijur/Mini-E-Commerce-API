@@ -48,34 +48,53 @@ if (config.enableSwagger) {
     res.send(swaggerSpec);
   });
 
-  // Serve Swagger UI with explicit file serving
-  app.use('/api-docs', swaggerUi.serveFiles(swaggerSpec, {
-    explorer: true,
-    customSiteTitle: 'Mini E-Commerce API Documentation',
-    customfavIcon: '/favicon.ico',
-    customCss: '.swagger-ui .topbar { display: none }',
-    swaggerOptions: {
-      persistAuthorization: true,
-      displayRequestDuration: true,
-      filter: true,
-      showExtensions: true,
-      showCommonExtensions: true,
-    },
-  }));
-  
-  app.get('/api-docs', swaggerUi.setup(swaggerSpec, {
-    explorer: true,
-    customSiteTitle: 'Mini E-Commerce API Documentation',
-    customfavIcon: '/favicon.ico',
-    customCss: '.swagger-ui .topbar { display: none }',
-    swaggerOptions: {
-      persistAuthorization: true,
-      displayRequestDuration: true,
-      filter: true,
-      showExtensions: true,
-      showCommonExtensions: true,
-    },
-  }));
+  // Serve Swagger UI with CDN assets (reliable for serverless)
+  const swaggerHtml = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini E-Commerce API Documentation</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css" />
+  <style>
+    html { box-sizing: border-box; overflow: -moz-scrollbars-vertical; overflow-y: scroll; }
+    *, *:before, *:after { box-sizing: inherit; }
+    body { margin: 0; padding: 0; }
+    .swagger-ui .topbar { display: none; }
+  </style>
+</head>
+<body>
+  <div id="swagger-ui"></div>
+  <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-standalone-preset.js"></script>
+  <script>
+    window.onload = function() {
+      window.ui = SwaggerUIBundle({
+        url: '/api-docs.json',
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIStandalonePreset
+        ],
+        plugins: [
+          SwaggerUIBundle.plugins.DownloadUrl
+        ],
+        layout: "StandaloneLayout",
+        persistAuthorization: true,
+        displayRequestDuration: true,
+        filter: true
+      });
+    };
+  </script>
+</body>
+</html>`;
+
+  app.get('/api-docs', (req: any, res: any) => {
+    res.setHeader('Content-Type', 'text/html');
+    res.send(swaggerHtml);
+  });
 }
 
 // Root endpoint
