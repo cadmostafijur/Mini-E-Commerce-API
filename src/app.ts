@@ -42,7 +42,14 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // API Documentation
 if (config.enableSwagger) {
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+  // Serve swagger.json
+  app.get('/api-docs.json', (req: any, res: any) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(swaggerSpec);
+  });
+
+  // Serve Swagger UI with explicit file serving
+  app.use('/api-docs', swaggerUi.serveFiles(swaggerSpec, {
     explorer: true,
     customSiteTitle: 'Mini E-Commerce API Documentation',
     customfavIcon: '/favicon.ico',
@@ -55,12 +62,20 @@ if (config.enableSwagger) {
       showCommonExtensions: true,
     },
   }));
-
-  // Serve swagger.json
-  app.get('/api-docs.json', (req: any, res: any) => {
-    res.setHeader('Content-Type', 'application/json');
-    res.send(swaggerSpec);
-  });
+  
+  app.get('/api-docs', swaggerUi.setup(swaggerSpec, {
+    explorer: true,
+    customSiteTitle: 'Mini E-Commerce API Documentation',
+    customfavIcon: '/favicon.ico',
+    customCss: '.swagger-ui .topbar { display: none }',
+    swaggerOptions: {
+      persistAuthorization: true,
+      displayRequestDuration: true,
+      filter: true,
+      showExtensions: true,
+      showCommonExtensions: true,
+    },
+  }));
 }
 
 // Root endpoint
