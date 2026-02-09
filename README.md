@@ -301,7 +301,24 @@ The database comes pre-seeded with:
 - Atomic transactions for order processing
 - Cart validation before checkout
 
-## 🧪 Testing the API
+## 📸 API Documentation (Swagger UI)
+
+The API features comprehensive interactive documentation powered by Swagger UI. Access it at:
+
+```
+http://localhost:3000/api-docs
+```
+
+**Visual Preview:**
+
+![Swagger API Documentation](screencapture-localhost-3000-api-docs-2026-02-09-21_06_37.png)
+
+The Swagger UI provides:
+- Interactive API testing interface
+- Complete endpoint documentation with request/response schemas
+- Built-in authentication support
+- Real-time API exploration
+
 
 ### Using Sample Data
 ```bash

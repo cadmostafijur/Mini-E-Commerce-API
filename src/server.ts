@@ -14,11 +14,11 @@ const startServer = async (): Promise<void> => {
       console.log(`📝 Environment: ${config.nodeEnv}`);
       
       if (config.enableSwagger) {
-        console.log(`📚 API Documentation: http://localhost:${config.port}/api-docs`);
+        console.log(` API Documentation: http://localhost:${config.port}/api-docs`);
       }
       
-      console.log(`🔗 API Base URL: http://localhost:${config.port}/api`);
-      console.log(`💊 Health Check: http://localhost:${config.port}/api/health`);
+      console.log(`API Base URL: http://localhost:${config.port}/api`);
+      console.log(`Health Check: http://localhost:${config.port}/api/health`);
     });
 
     // Graceful shutdown
