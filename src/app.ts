@@ -20,8 +20,14 @@ const app = express();
 // Trust proxy for rate limiting and security
 app.set('trust proxy', 1);
 
-// Security headers
-app.use(securityHeaders);
+// Security headers (will be disabled for Swagger routes)
+app.use((req, res, next) => {
+  // Disable CSP for Swagger UI to allow CDN resources
+  if (req.path.startsWith('/api-docs')) {
+    return next();
+  }
+  securityHeaders(req, res, next);
+});
 
 // CORS
 app.use(corsMiddleware);
