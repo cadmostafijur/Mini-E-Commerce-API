@@ -57,11 +57,285 @@ const options: swaggerJsdoc.Options = {
     },
     servers: [
       {
-        url: `http://localhost:${config.port}/api`,
-        description: 'Development server',
+        url: `/api`,
+        description: 'API Server',
       },
     ],
-    paths: {},
+    paths: {
+      '/health': {
+        get: {
+          tags: ['Health'],
+          summary: 'Health check endpoint',
+          description: 'Check if the API is running',
+          responses: {
+            '200': {
+              description: 'API is healthy',
+            },
+          },
+        },
+      },
+      '/auth/register': {
+        post: {
+          tags: ['Authentication'],
+          summary: 'Register a new user',
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  required: ['email', 'password', 'name'],
+                  properties: {
+                    email: { type: 'string', format: 'email' },
+                    password: { type: 'string', minLength: 8 },
+                    name: { type: 'string' },
+                    role: { type: 'string', enum: ['CUSTOMER', 'ADMIN'] },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            '201': { description: 'User registered successfully' },
+          },
+        },
+      },
+      '/auth/login': {
+        post: {
+          tags: ['Authentication'],
+          summary: 'Login user',
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  required: ['email', 'password'],
+                  properties: {
+                    email: { type: 'string', format: 'email' },
+                    password: { type: 'string' },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            '200': { description: 'Login successful' },
+          },
+        },
+      },
+      '/auth/profile': {
+        get: {
+          tags: ['Authentication'],
+          summary: 'Get user profile',
+          security: [{ bearerAuth: [] }],
+          responses: {
+            '200': { description: 'Profile retrieved' },
+          },
+        },
+      },
+      '/products': {
+        get: {
+          tags: ['Products'],
+          summary: 'Get all products',
+          parameters: [
+            {
+              in: 'query',
+              name: 'page',
+              schema: { type: 'integer', default: 1 },
+              description: 'Page number',
+            },
+            {
+              in: 'query',
+              name: 'limit',
+              schema: { type: 'integer', default: 10 },
+              description: 'Items per page',
+            },
+          ],
+          responses: {
+            '200': { description: 'List of products' },
+          },
+        },
+        post: {
+          tags: ['Products'],
+          summary: 'Create product (Admin only)',
+          security: [{ bearerAuth: [] }],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  required: ['name', 'price', 'stock'],
+                  properties: {
+                    name: { type: 'string' },
+                    description: { type: 'string' },
+                    price: { type: 'number' },
+                    stock: { type: 'integer' },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            '201': { description: 'Product created' },
+          },
+        },
+      },
+      '/products/{id}': {
+        get: {
+          tags: ['Products'],
+          summary: 'Get product by ID',
+          parameters: [
+            {
+              in: 'path',
+              name: 'id',
+              required: true,
+              schema: { type: 'string' },
+            },
+          ],
+          responses: {
+            '200': { description: 'Product details' },
+          },
+        },
+        put: {
+          tags: ['Products'],
+          summary: 'Update product (Admin only)',
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            {
+              in: 'path',
+              name: 'id',
+              required: true,
+              schema: { type: 'string' },
+            },
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    name: { type: 'string' },
+                    description: { type: 'string' },
+                    price: { type: 'number' },
+                    stock: { type: 'integer' },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            '200': { description: 'Product updated' },
+          },
+        },
+        delete: {
+          tags: ['Products'],
+          summary: 'Delete product (Admin only)',
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            {
+              in: 'path',
+              name: 'id',
+              required: true,
+              schema: { type: 'string' },
+            },
+          ],
+          responses: {
+            '200': { description: 'Product deleted' },
+          },
+        },
+      },
+      '/cart': {
+        get: {
+          tags: ['Cart'],
+          summary: 'Get user cart',
+          security: [{ bearerAuth: [] }],
+          responses: {
+            '200': { description: 'Cart details' },
+          },
+        },
+      },
+      '/cart/add': {
+        post: {
+          tags: ['Cart'],
+          summary: 'Add item to cart',
+          security: [{ bearerAuth: [] }],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  required: ['productId', 'quantity'],
+                  properties: {
+                    productId: { type: 'string' },
+                    quantity: { type: 'integer', minimum: 1 },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            '200': { description: 'Item added to cart' },
+          },
+        },
+      },
+      '/orders': {
+        get: {
+          tags: ['Orders'],
+          summary: 'Get orders',
+          security: [{ bearerAuth: [] }],
+          responses: {
+            '200': { description: 'List of orders' },
+          },
+        },
+        post: {
+          tags: ['Orders'],
+          summary: 'Create order from cart',
+          security: [{ bearerAuth: [] }],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  required: ['paymentMethod'],
+                  properties: {
+                    paymentMethod: {
+                      type: 'string',
+                      enum: ['credit_card', 'debit_card', 'paypal'],
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            '201': { description: 'Order created successfully' },
+          },
+        },
+      },
+      '/orders/{id}': {
+        get: {
+          tags: ['Orders'],
+          summary: 'Get order by ID',
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            {
+              in: 'path',
+              name: 'id',
+              required: true,
+              schema: { type: 'string' },
+            },
+          ],
+          responses: {
+            '200': { description: 'Order details' },
+          },
+        },
+      },
+    },
     components: {
       securitySchemes: {
         bearerAuth: {
@@ -386,6 +660,8 @@ const options: swaggerJsdoc.Options = {
   apis: [
     './src/controllers/*.ts',
     './src/routes/*.ts',
+    './dist/controllers/*.js',
+    './dist/routes/*.js',
   ],
 };
 
