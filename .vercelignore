@@ -5,12 +5,6 @@ node_modules
 .env
 .env.*
 
-# Development files
-src
-*.ts
-!api/**/*.ts
-tsconfig.json
-
 # Git
 .git
 .gitignore
